@@ -69,11 +69,11 @@ function sound() {
     const osc = ctx.createOscillator();
     const gain = ctx.createGain();
     osc.type = "sine";
-    osc.frequency.setValueAtTime(240, t);
-    osc.frequency.exponentialRampToValueAtTime(72, t + 0.16);
+    osc.frequency.setValueAtTime(260, t);
+    osc.frequency.exponentialRampToValueAtTime(58, t + 0.19);
     gain.gain.setValueAtTime(0.0001, t);
-    gain.gain.exponentialRampToValueAtTime(0.55, t + 0.008);
-    gain.gain.exponentialRampToValueAtTime(0.0001, t + 0.26);
+    gain.gain.exponentialRampToValueAtTime(0.78, t + 0.006);
+    gain.gain.exponentialRampToValueAtTime(0.0001, t + 0.32);
     osc.connect(gain).connect(ctx.destination);
     osc.start(t);
     osc.stop(t + 0.3);
@@ -88,7 +88,7 @@ function sound() {
     bp.type = "bandpass";
     bp.frequency.value = 1800;
     bp.Q.value = 0.9;
-    ng.gain.value = 0.18;
+    ng.gain.value = 0.3;
     noise.buffer = buf;
     noise.connect(bp).connect(ng).connect(ctx.destination);
     noise.start(t);
@@ -238,17 +238,19 @@ async function mergeGuest() {
 }
 
 function ripple() {
-  const r = document.createElement("span");
-  r.className = "ripple";
-  els.rippleLayer.appendChild(r);
-  r.addEventListener("animationend", () => r.remove());
+  for (const cls of ["ripple", "ripple delay"]) {
+    const r = document.createElement("span");
+    r.className = cls;
+    els.rippleLayer.appendChild(r);
+    r.addEventListener("animationend", () => r.remove());
+  }
 }
 
 function floatMerit() {
   const f = document.createElement("span");
   f.className = "float-merit";
   f.textContent = "+1";
-  f.style.left = `${44 + Math.random() * 12}%`;
+  f.style.left = `${56 + Math.random() * 10}%`;
   els.floatLayer.appendChild(f);
   f.addEventListener("animationend", () => f.remove());
 }
@@ -275,14 +277,16 @@ function tap(event) {
   void els.muyu.offsetWidth;
   els.muyu.classList.add("hit");
   els.mallet.classList.add("swing");
-  setTimeout(() => els.muyu.classList.remove("hit"), 240);
-  setTimeout(() => els.mallet.classList.remove("swing"), 240);
+  els.muyu.parentElement.classList.add("impact");
+  setTimeout(() => els.muyu.classList.remove("hit"), 220);
+  setTimeout(() => els.mallet.classList.remove("swing"), 220);
+  setTimeout(() => els.muyu.parentElement.classList.remove("impact"), 220);
 
   ripple();
   floatMerit();
   bumpCombo();
   sound();
-  navigator.vibrate?.(8);
+  navigator.vibrate?.([12, 30, 18]);
 
   if (state.session) {
     state.pending += 1;
