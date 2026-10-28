@@ -3,25 +3,50 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="theme-color" content="#140d08">
+<meta name="theme-color" content="#9fd8f0">
 <title>敲木鱼 · 功德 +1</title>
 <meta name="description" content="登录邮箱，敲一下木鱼，积一份功德。">
-<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect width='64' height='64' rx='16' fill='%23a85f2c'/><text x='32' y='45' font-size='34' text-anchor='middle' fill='%232a1206' font-family='serif' font-weight='700'>木</text></svg>">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect width='64' height='64' rx='16' fill='%23f6c644'/><ellipse cx='32' cy='38' rx='20' ry='15' fill='%23c98850' stroke='%238a5326' stroke-width='3'/><path d='M14 34 Q32 24 50 34 Q32 42 14 34 Z' fill='%236b3d1a'/></svg>">
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
 <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-<div class="glow" aria-hidden="true"></div>
+<div class="scene" aria-hidden="true">
+  <div class="sun"></div>
+  <span class="cloud c1"></span>
+  <span class="cloud c2"></span>
+  <span class="cloud c3"></span>
+  <svg class="hills" viewBox="0 0 1440 340" preserveAspectRatio="xMidYMax slice" aria-hidden="true">
+    <path d="M0 210 Q240 96 480 186 Q720 262 960 170 Q1200 88 1440 190 V340 H0 Z" fill="#bfe3c0"/>
+    <path d="M0 262 Q360 158 720 236 Q1080 306 1440 226 V340 H0 Z" fill="#9ed49a"/>
+    <path d="M0 306 Q480 228 960 286 Q1200 310 1440 268 V340 H0 Z" fill="#7fc36a"/>
+    <g class="flowers">
+      <g transform="translate(180 312)"><circle r="5" fill="#fff"/><circle r="2" fill="#f4b942"/></g>
+      <g transform="translate(360 326)"><circle r="5" fill="#ffd6e0"/><circle r="2" fill="#e86a8a"/></g>
+      <g transform="translate(920 318)"><circle r="5" fill="#fff"/><circle r="2" fill="#f4b942"/></g>
+      <g transform="translate(1180 330)"><circle r="5" fill="#ffd6e0"/><circle r="2" fill="#e86a8a"/></g>
+      <g transform="translate(1320 314)"><circle r="5" fill="#fff"/><circle r="2" fill="#f4b942"/></g>
+    </g>
+  </svg>
+</div>
+<div id="flashbang" class="flashbang" aria-hidden="true"></div>
 
 <header class="topbar">
   <a class="brand" href="./">
-    <span class="brand-mark" aria-hidden="true">木</span>
-    <span>敲木鱼</span>
+    <span class="brand-mark" aria-hidden="true">
+      <svg viewBox="0 0 64 64" width="22" height="22">
+        <ellipse cx="32" cy="38" rx="20" ry="15" fill="#c98850" stroke="#8a5326" stroke-width="3"/>
+        <path d="M14 34 Q32 24 50 34 Q32 42 14 34 Z" fill="#6b3d1a"/>
+      </svg>
+    </span>
+    <span class="brand-text">敲木鱼</span>
   </a>
   <div class="topbar-actions">
     <button id="soundToggle" class="icon-btn" type="button" aria-pressed="true" aria-label="关闭木鱼声" title="木鱼声">
       <svg class="sound-on" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
         <path d="M18 8a6 6 0 0 0-12 0c0 7-3 8-3 8h18s-3-1-3-8"/>
         <path d="M13.7 21a2 2 0 0 1-3.4 0"/>
+        <path d="M9 9.5c1.6 1.6 2.2 3.4 1.8 5.5" opacity=".6"/>
       </svg>
       <svg class="sound-off" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
         <path d="M13.7 21a2 2 0 0 1-3.4 0"/>
@@ -51,59 +76,88 @@
   </section>
 
   <div class="muyu-wrap">
+    <div id="impactGlow" class="impact-glow" aria-hidden="true"></div>
+    <canvas id="scene3d" class="scene3d" aria-hidden="true"></canvas>
     <div id="rippleLayer" class="ripple-layer" aria-hidden="true"></div>
     <button id="muyu" class="muyu" type="button" aria-label="敲一下木鱼，功德加一">
-      <svg class="muyu-svg" viewBox="0 0 320 260" aria-hidden="true">
+      <svg class="muyu-svg" viewBox="0 0 440 330" aria-hidden="true">
         <defs>
-          <radialGradient id="wood" cx="34%" cy="24%" r="86%">
-            <stop offset="0%" stop-color="#d99a58"/>
-            <stop offset="46%" stop-color="#a85f2c"/>
-            <stop offset="100%" stop-color="#552a10"/>
+          <radialGradient id="woodG" cx="36%" cy="28%" r="90%">
+            <stop offset="0%" stop-color="#e2a96b"/>
+            <stop offset="60%" stop-color="#c98850"/>
+            <stop offset="100%" stop-color="#a06a38"/>
           </radialGradient>
-          <radialGradient id="inner" cx="50%" cy="30%" r="70%">
-            <stop offset="0%" stop-color="#3a1a08"/>
-            <stop offset="100%" stop-color="#1b0b03"/>
-          </radialGradient>
-          <linearGradient id="rim" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0%" stop-color="#f0c489" stop-opacity=".9"/>
-            <stop offset="100%" stop-color="#6b3413" stop-opacity=".2"/>
+          <linearGradient id="dogBody" x1="0.2" y1="0" x2="0.8" y2="1">
+            <stop offset="0%" stop-color="#ffd95e"/>
+            <stop offset="100%" stop-color="#f0b83a"/>
           </linearGradient>
-          <filter id="soft" x="-20%" y="-20%" width="140%" height="140%">
-            <feGaussianBlur stdDeviation="6"/>
-          </filter>
+          <linearGradient id="dogHead" x1="0.2" y1="0" x2="0.8" y2="1">
+            <stop offset="0%" stop-color="#ffdf70"/>
+            <stop offset="100%" stop-color="#f2bc42"/>
+          </linearGradient>
         </defs>
-        <ellipse cx="160" cy="226" rx="112" ry="18" fill="#000" opacity=".35" filter="url(#soft)"/>
-        <ellipse cx="160" cy="148" rx="122" ry="88" fill="url(#wood)" stroke="#3d1e0c" stroke-width="5"/>
-        <ellipse cx="160" cy="148" rx="122" ry="88" fill="url(#rim)" opacity=".35"/>
-        <ellipse cx="126" cy="104" rx="58" ry="26" fill="#fff" opacity=".13"/>
-        <path d="M74 172 Q160 214 246 172 Q160 198 74 172 Z" fill="url(#inner)"/>
-        <path d="M78 170 Q160 206 242 170" fill="none" stroke="#401f0b" stroke-width="4" stroke-linecap="round"/>
-        <circle cx="236" cy="126" r="13" fill="#2a1206"/>
-        <circle cx="239" cy="122" r="4.5" fill="#f6dfae"/>
-        <g stroke="#4a2410" stroke-width="2" fill="none" opacity=".45">
-          <path d="M96 132 q10 -8 20 0 q10 8 20 0"/>
-          <path d="M88 156 q10 -8 20 0 q10 8 20 0"/>
-          <path d="M104 180 q10 -8 20 0 q10 8 20 0"/>
+
+        <!-- 木鱼 -->
+        <g class="muyu-fish">
+          <ellipse cx="105" cy="288" rx="60" ry="11" fill="rgba(60,40,10,.18)"/>
+          <ellipse cx="105" cy="244" rx="56" ry="44" fill="url(#woodG)" stroke="#8a5326" stroke-width="3"/>
+          <path d="M64 228 Q105 210 146 228 Q105 242 64 228 Z" fill="#6b3d1a"/>
+          <path d="M68 227 Q105 212 142 227" fill="none" stroke="#f0c489" stroke-width="2" opacity=".65" stroke-linecap="round"/>
+          <path d="M70 262 Q105 274 140 262" fill="none" stroke="rgba(122,74,34,.5)" stroke-width="2" stroke-linecap="round"/>
+          <path d="M62 246 Q105 258 148 246" fill="none" stroke="rgba(122,74,34,.4)" stroke-width="2" stroke-linecap="round"/>
+          <circle cx="136" cy="222" r="3" fill="#6b3d1a"/>
+          <ellipse cx="84" cy="212" rx="16" ry="9" fill="#fff" opacity=".25"/>
         </g>
-        <path d="M196 196 q16 12 34 6" stroke="#6b3413" stroke-width="3" fill="none" opacity=".5"/>
+
+        <!-- 柴犬 -->
+        <g class="dog">
+          <ellipse cx="285" cy="296" rx="80" ry="12" fill="rgba(60,40,10,.18)"/>
+          <path d="M330 240 C366 234 380 204 366 178 C362 208 344 224 322 230 Z" fill="#f6c644" stroke="#d99a26" stroke-width="3" stroke-linejoin="round"/>
+          <path d="M285 292 C330 292 352 262 352 220 C352 180 324 154 286 154 C248 154 222 180 222 220 C222 262 244 292 285 292 Z" fill="url(#dogBody)" stroke="#d99a26" stroke-width="3"/>
+          <ellipse cx="290" cy="254" rx="42" ry="36" fill="#fff8ea"/>
+          <rect x="250" y="238" width="22" height="52" rx="11" fill="#f6c644" stroke="#d99a26" stroke-width="3"/>
+          <ellipse cx="261" cy="292" rx="26" ry="9" fill="#f6c644" stroke="#d99a26" stroke-width="3"/>
+          <!-- 耳朵 -->
+          <path d="M222 76 L214 30 L256 56 Z" fill="#f6c644" stroke="#d99a26" stroke-width="3" stroke-linejoin="round"/>
+          <path d="M228 66 L226 46 L246 58 Z" fill="#e8946a"/>
+          <path d="M318 74 L330 28 L286 54 Z" fill="#f6c644" stroke="#d99a26" stroke-width="3" stroke-linejoin="round"/>
+          <path d="M312 64 L318 44 L298 56 Z" fill="#e8946a"/>
+          <!-- 头 -->
+          <circle cx="272" cy="118" r="64" fill="url(#dogHead)" stroke="#d99a26" stroke-width="3"/>
+          <path d="M212 126 Q272 190 332 126 Q330 168 272 172 Q216 170 212 126 Z" fill="#fff8ea"/>
+          <!-- 眼睛 -->
+          <ellipse cx="246" cy="110" rx="12" ry="14" fill="#fff"/>
+          <circle cx="250" cy="112" r="4.5" fill="#2a2018"/>
+          <ellipse cx="296" cy="110" rx="12" ry="14" fill="#fff"/>
+          <circle cx="292" cy="112" r="4.5" fill="#2a2018"/>
+          <!-- 鼻与嘴 -->
+          <ellipse cx="272" cy="138" rx="9" ry="7" fill="#3a2a1a"/>
+          <path d="M262 148 Q272 158 282 148" fill="none" stroke="#3a2a1a" stroke-width="3" stroke-linecap="round"/>
+          <!-- 腮红 -->
+          <ellipse cx="224" cy="136" rx="9" ry="5" fill="#ffb08a" opacity=".55"/>
+          <ellipse cx="320" cy="136" rx="9" ry="5" fill="#ffb08a" opacity=".55"/>
+        </g>
+
+        <!-- 手臂与木槌 -->
+        <g class="mallet-g">
+          <path d="M232 226 Q204 236 178 230" fill="none" stroke="#d99a26" stroke-width="19" stroke-linecap="round"/>
+          <path d="M232 226 Q204 236 178 230" fill="none" stroke="#f6c644" stroke-width="13" stroke-linecap="round"/>
+          <path d="M174 228 L136 217" fill="none" stroke="#8a5326" stroke-width="8" stroke-linecap="round"/>
+          <circle cx="176" cy="230" r="11" fill="#fff8ea" stroke="#d99a26" stroke-width="3"/>
+          <circle cx="128" cy="214" r="15" fill="#c98850" stroke="#8a5326" stroke-width="3"/>
+          <circle cx="123" cy="209" r="4" fill="#f0c489" opacity=".75"/>
+        </g>
       </svg>
     </button>
 
-    <div id="mallet" class="mallet" aria-hidden="true">
-      <svg viewBox="0 0 120 150">
-        <rect x="53" y="8" width="14" height="82" rx="7" fill="#8a5330"/>
-        <rect x="53" y="8" width="6" height="82" rx="3" fill="#c98a4b" opacity=".45"/>
-        <rect x="49" y="74" width="22" height="9" rx="4" fill="#5a2d12"/>
-        <ellipse cx="60" cy="110" rx="27" ry="21" fill="#b9763f" stroke="#5a2d12" stroke-width="3"/>
-        <ellipse cx="52" cy="102" rx="9" ry="6" fill="#f3d9a4" opacity=".3"/>
-      </svg>
-    </div>
-
+    <canvas id="sparkCanvas" class="spark-canvas" aria-hidden="true"></canvas>
     <div id="floatLayer" class="float-layer" aria-hidden="true"></div>
   </div>
 
-  <p id="combo" class="combo" aria-live="polite"></p>
-  <p class="hint">点击木鱼，或按 <kbd>空格</kbd> · 一下一份功德</p>
+  <div class="combo-rail" aria-hidden="true"><i id="comboBar"></i></div>
+  <p id="combo" class="combo" aria-hidden="true"></p>
+  <p id="srLive" class="sr-only" role="status" aria-live="polite"></p>
+  <p class="hint">点击柴犬，或按 <kbd>空格</kbd> · 一下一份功德</p>
 
   <div id="guestNote" class="note" hidden>
     当前为游客模式，功德只存在本机。<button id="guestLogin" class="link-btn" type="button">登录后存入云端</button>
@@ -115,9 +169,8 @@
   <a href="https://github.com/ninetyhe-90/muyu" target="_blank" rel="noreferrer">GitHub</a>
 </footer>
 
-<div id="authModal" class="modal" hidden>
-  <div class="modal-backdrop" data-close></div>
-  <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="authTitle">
+<dialog id="authModal" class="modal" aria-labelledby="authTitle">
+  <div class="modal-card">
     <button class="modal-close" type="button" data-close aria-label="关闭">×</button>
 
     <div id="authFormView">
@@ -151,7 +204,7 @@
       <button id="logoutBtn" class="ghost" type="button">退出登录</button>
     </div>
   </div>
-</div>
+</dialog>
 
 <div id="toast" class="toast" role="status" aria-live="polite"></div>
 
